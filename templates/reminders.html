@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Reminders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Reminders</h1>
+        {% if reminders %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Due Date</th>
+                        <th>Reminder Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reminder in reminders %}
+                        <tr>
+                            <td>{{ reminder[0] }}</td>
+                            <td>{{ reminder[1] }}</td>
+                            <td>{{ reminder[2] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No reminders set.</p>
+        {% endif %}
+        <a href="{{ url_for('home') }}"><button>Back to Tasks</button></a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ session['username'] }}!</h1>
+        <a href="{{ url_for('add_task_route') }}"><button>Add Task</button></a>
+        <a href="{{ url_for('reminders') }}"><button>View Reminders</button></a>
+        <h2>My Tasks</h2>
+
+        <!-- Task Counter -->
+        <p>You have {{ task_count }} task{{ 's' if task_count != 1 else '' }}.</p>
+        <!-- Search Form -->
+        <form method="get" action="{{ url_for('home') }}">
+            <input type="text" name="search" placeholder="Search by title" value="{{ search_title }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Filter Form -->
+        <form method="get" action="{{ url_for('home') }}">
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category }}" {% if filter_category == category %}selected{% endif %}>{{ category }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
+        <!-- Table Sorting -->
+        <p>Sort by:
+            <a href="{{ url_for('home', search=search_title, sort='due_date', category=filter_category) }}" {% if sort_by == 'due_date' %}style="font-weight: bold;"{% endif %}>Due Date</a> |
+            <a href="{{ url_for('home', search=search_title, sort='title', category=filter_category) }}" {% if sort_by == 'title' %}style="font-weight: bold;"{% endif %}>Title</a>
+        </p>
+
+        {% if tasks %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.due_date }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-tasks-message">No tasks for you. Please add one.</p>
+        {% endif %}
+        <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+    </div>
+</body>
+</html>
