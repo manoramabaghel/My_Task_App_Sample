@@ -82,6 +82,6 @@ def add_task_route():
 
 if __name__ == '__main__':
     init_db()
-    host = "127.0.0.1"
-    port = 8000
+    host = os.environ.get("HOST", "127.0.0.1")  # Default to 0.0.0.0 for external access
+    port = int(os.environ.get("PORT", 8000))  # Default to 5000 if PORT is not set
     app.run(debug=True, host=host, port=port)
